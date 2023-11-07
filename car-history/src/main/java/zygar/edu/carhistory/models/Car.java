@@ -6,5 +6,5 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "car")
 public class Car {
-    
+    private CarOwner carOwner;
 }
