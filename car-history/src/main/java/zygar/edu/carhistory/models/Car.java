@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +31,8 @@ public class Car {
     private String moc;
     private String opis;
     private BigDecimal koszt;
+    @OneToMany
     private List<CarNote> carNotes;
+    @ManyToOne
     private CarOwner carOwner;
 }

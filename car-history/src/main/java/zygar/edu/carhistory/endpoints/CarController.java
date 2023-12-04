@@ -3,18 +3,12 @@ package zygar.edu.carhistory.endpoints;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 import zygar.edu.carhistory.models.Car;
 import zygar.edu.carhistory.repositories.CarRepo;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
-
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class CarController {
     

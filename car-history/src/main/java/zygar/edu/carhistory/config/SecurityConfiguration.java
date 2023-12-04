@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -18,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -28,18 +33,24 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain( HttpSecurity http) throws Exception{
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()).headers(headers -> headers.frameOptions().disable())
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests()
-                .requestMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement(management -> management
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .logout((logout) -> logout.permitAll());
+
         return http.build();
     }
 
