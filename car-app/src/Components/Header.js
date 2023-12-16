@@ -26,6 +26,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('loggedInUserEmail');
+    console.log('wyloguje')
     setIsLoggedIn(false);
     setLoggedInUserEmail('');
   };

@@ -9,4 +9,5 @@ import zygar.edu.carhistory.models.Car;
 public interface CarRepo extends JpaRepository<Car, Long> {
     List<Car> findAll();
     List<Car> findAllByCarOwnerId(Long id);
+    List<Car> findAllByCarOwnerEmail(String id);
 }
