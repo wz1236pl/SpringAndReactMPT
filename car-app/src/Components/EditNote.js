@@ -17,14 +17,11 @@ function EditNote() {
     })
 
     useEffect(()=> {
-        axios.get('http://localhost:8080/api/cars?id='+id).then(
+        axios.get('http://localhost:8080/api/carNote?id='+id).then(
             res => {setValues({...values,
             id: res.data.id,
-            marka : res.data.marka,
-            model : res.data.model,
-            rok: res.data.rok,
-            przebieg: res.data.przebieg,
-            moc: res.data.moc,
+            koszt : res.data.koszt,
+            przebieg : res.data.przebieg,
             opis: res.data.opis})
         })}, [])
 
@@ -48,7 +45,7 @@ function EditNote() {
 
     try {
       console.log(token)
-      const response = await axios.put('http://localhost:8080/api/cars/update', serializedData, {
+      const response = await axios.put('http://localhost:8080/api/carNote/update', serializedData, {
         headers: headers
       });
       // Handle response
@@ -61,7 +58,7 @@ function EditNote() {
 
   return (
     <>
-      <div className="flex min-h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8" >
+      <div className="flex place-content-stretch min-h-screen w-full w-min-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8" >
         <div className="w-full max-w-md space-y-8">
           <div>
 
@@ -129,8 +126,7 @@ function EditNote() {
                 type="submit"
                 className="group relative flex w-38 justify-center mx-auto rounded-md bg-indigo-600 py-2 px-7 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-
-                Aktualizuj pojazd
+                Aktualizuj wpis
               </button>
             </div>
           </form>

@@ -26,6 +26,7 @@ const NoteTable = ({ carId }) => {
         };
         fetchData();
         console.log(data)
+        
       }, []);
 
     const handleDeleteClick = async (noteId) => {
@@ -46,33 +47,37 @@ const NoteTable = ({ carId }) => {
         console.log(requestOptions)
         fetch(apiUrl, requestOptions).then(setData(data.filter(carNote => carNote.id !== noteId)))
       };
+      
+  if (data === null || data.length === 0) {
+          return ''; 
+      }
 
   return (
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="overflow-x-auto shadow-md sm:rounded-lg">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Koszt
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Przebieg
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                     Opis
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3 text-right">
                     Akcje
                 </th>
             </tr>
         </thead>
         <tbody>
         {data.map((note, index) => (
-          <tr key={index}>
-            <td>{note.koszt}</td>
-            <td>{note.przebieg}</td>
-            <td>{note.opis}</td>
-            <td>
+          <tr key={index} className="text-white">
+            <td className="px-6 py-3">{note.koszt}</td>
+            <td className="px-6 py-3">{note.przebieg}</td>
+            <td className="px-6 py-3">{note.opis}</td>
+            <td className="flex flex-row justify-end px-6 py-3">
                 <Link to={`/EditNote/${note.id}`} className="flex pr-0 ml-3" >
                     <img className="w-7 h-9" src={edit} alt="editIcon" />
                 </Link>

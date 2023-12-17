@@ -54,7 +54,7 @@ export default function Example() {
     <>
       <div className="pt-24 pb-24">
         {data.map((car, index) => (
-          <div key={index} className="flex flex-row justify-center mt-4 px-4 sm:px-0">
+          <div key={index} className="flex flex-col items-center mt-4 px-4 sm:px-0">
             <div className="float-left w-full sm:w-11/12 md:w-9/12 h-auto rounded-lg bg-black flex flex-col sm:flex-row justify-between car-list">
               <div className="flex items-center w-full sm:w-1/4 text-white m-2.5 overflow-hidden">
                 <img
@@ -75,7 +75,7 @@ export default function Example() {
                 </p>
               </div>
               <div className="text-white w-full sm:w-56 flex-col justify-center sm:justify-end sm:float-right py-2.5 ">
-              <p className="flex text-2xl py-0.5 text-left sm:text-left justify-center sm:justify-end mr-2">
+                <p className="flex text-2xl py-0.5 text-left sm:text-left justify-center sm:justify-end mr-2">
                   Wydałeś
                 </p>
                 <p className="flex text-2xl py-0.5 text-left sm:text-left justify-center sm:justify-end mr-2">
@@ -94,8 +94,8 @@ export default function Example() {
                 </div>
               </div>
             </div>
-            <div class="flex">
-            <NoteTable carId={car.id} />
+            <div className="float-left w-full sm:w-11/12 md:w-9/12 bg-black rounded-lg">
+              <NoteTable carId={car.id} />
             </div>
           </div>
         ))}

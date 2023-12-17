@@ -77,7 +77,7 @@ public class CarController {
     public ResponseEntity<Car> deleteCar(@RequestBody Map<String, Long> map) {
         log.info("Delete car: {}", map);
         Long id = map.get("id");
-        carNoteRepo.deleteAllByCarId(id);
+        carNoteRepo.deleteAll(carNoteRepo.findAllByCarId(id));
         carRepo.deleteById(id);
         return ResponseEntity.ok().build();
     }
@@ -86,6 +86,10 @@ public class CarController {
     public ResponseEntity<CarNote> deleteCarNote(@RequestBody Map<String, Long> map) {
         log.info("Delete car: {}", map);
         Long id = map.get("id");
+        CarNote note = carNoteRepo.findById(id).get();
+        Car car = note.getCar();
+        car.setKoszt(car.getKoszt().subtract(note.getKoszt()));
+        carRepo.save(car);
         carNoteRepo.deleteById(id);
         return ResponseEntity.ok().build();
     }
@@ -94,6 +98,31 @@ public class CarController {
     public List<CarNote> getCarNotes(@RequestParam Long carId) {
         log.info("Get carNotes: {}", carId);
         return carNoteRepo.findAllByCarId(carId);
+    }
+
+    @GetMapping("/api/carNote{id}")
+    public CarNote getCarNote(@RequestParam Long id) {
+        log.info("Get note: {}", id);
+        return carNoteRepo.findById(id).get();
+    }
+
+    @PutMapping("/api/carNote/update")
+    public ResponseEntity<CarNote> updateNote(CarNote newNote) {
+        CarNote noteToUpdate = carNoteRepo.findById(newNote.getId()).get();
+        Car car = noteToUpdate.getCar();
+        car.setPrzebieg(newNote.getPrzebieg());
+        BigDecimal wynik = noteToUpdate.getKoszt().subtract(newNote.getKoszt());
+        if (wynik.compareTo(BigDecimal.ZERO) == 1) {
+            car.setKoszt(noteToUpdate.getKoszt().subtract(wynik));
+        }
+        if (wynik.compareTo(BigDecimal.ZERO) == -1) {
+            car.setKoszt(noteToUpdate.getKoszt().add(wynik));
+        }
+        noteToUpdate.setKoszt(newNote.getKoszt());
+        noteToUpdate.setPrzebieg(newNote.getPrzebieg());
+        noteToUpdate.setOpis(newNote.getOpis());
+        carNoteRepo.save(noteToUpdate);
+        return ResponseEntity.ok().build();
     }
 
 }
