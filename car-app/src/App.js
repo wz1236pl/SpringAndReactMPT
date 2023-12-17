@@ -8,6 +8,9 @@ import LoginForm from '../src/Components/LoginForm';
 import AddAnnouncement from './Components/AddAnnouncement';
 import CarList from './Components/CarList';
 import ResetPassword from './Components/ResetPassword';
+import EditCar from './Components/EditCar';
+import AddNote from './Components/AddNote';
+import EditNote from './Components/EditNote';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
         <Route path="/AddAnnouncement" element={<AddAnnouncement />} />
         <Route path="/CarList" element={<CarList />} />
         <Route path="/ResetPassword" element={<ResetPassword />} />
+        <Route path="/EditCar/:id" element={<EditCar />} />
+        <Route path="/AddNote/:id" element={<AddNote />} />
+        <Route path="/EditNote/:id" element={<EditNote />} />
       </Routes>
     </>
   );

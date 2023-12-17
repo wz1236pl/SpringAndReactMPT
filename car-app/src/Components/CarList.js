@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom"
 
 import noImage from '../../src/Assets/noImg.png';
 import edit from '../../src/Assets/edit.svg';
 import add from '../../src/Assets/addNote.svg';
+import deleteCar from '../../src/Assets/delete.svg';
+import NoteTable from './NoteTable';
 
 export default function Example() {
   const [data, setData] = useState([]);
-  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -17,7 +19,6 @@ export default function Example() {
     };
     const fetchData = async () => {
       try {
-        console.log(token)
         const response = await axios.get('http://localhost:8080/api/cars/all',{
           headers: headers
         });
@@ -27,17 +28,34 @@ export default function Example() {
       }
     };
     fetchData();
+    console.log(data)
   }, []);
 
-  console.log(data);
-
+  const handleDeleteClick = async (carId) => {
+    const token = localStorage.getItem('token');
+    console.log('carId: ' + carId)
+    if (carId === null) {
+      return; // Exit the function if carId is null
+    }
+    const apiUrl = 'http://localhost:8080/api/cars/delete';
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({id:carId}),
+    };
+    console.log(requestOptions)
+    fetch(apiUrl, requestOptions).then(setData(data.filter(car => car.id !== carId)))
+  };
 
   return (
     <>
       <div className="pt-24 pb-24">
         {data.map((car, index) => (
-          <div key={index} className="flex justify-center mt-4 px-4 sm:px-0">
-            <div className="w-full sm:w-11/12 md:w-9/12 h-auto rounded-lg bg-black flex flex-col sm:flex-row justify-between car-list">
+          <div key={index} className="flex flex-row justify-center mt-4 px-4 sm:px-0">
+            <div className="float-left w-full sm:w-11/12 md:w-9/12 h-auto rounded-lg bg-black flex flex-col sm:flex-row justify-between car-list">
               <div className="flex items-center w-full sm:w-1/4 text-white m-2.5 overflow-hidden">
                 <img
                   className="w-full max-w-full h-32 sm:h-auto object-contain object-center"
@@ -64,14 +82,20 @@ export default function Example() {
                   {car.koszt} PLN
                 </p>
                 <div className="flex pr-0 ml-3 mr-2 justify-center sm:justify-end">
-                <button className="flex pr-0 ml-3">
-                    <img className="w-7 h-9" src={add} alt="heartIcon" />
-                  </button>
-                  <button className="flex pr-0 ml-3">
-                    <img className="w-7 h-9" src={edit} alt="heartIcon" />
+                  <Link to={`/AddNote/${car.id}`} className="flex pr-0 ml-3" >
+                    <img className="w-7 h-9" src={add} alt="addIcon" />
+                  </Link>
+                  <Link to={`/EditCar/${car.id}`} className="flex pr-0 ml-3" >
+                    <img className="w-7 h-9" src={edit} alt="editIcon" />
+                  </Link>
+                  <button className="flex pr-0 ml-3" onClick={() => handleDeleteClick(car.id)}> 
+                    <img className="w-7 h-9" src={deleteCar} alt="deleteIcon" />
                   </button>
                 </div>
               </div>
+            </div>
+            <div class="flex">
+            <NoteTable carId={car.id} />
             </div>
           </div>
         ))}
