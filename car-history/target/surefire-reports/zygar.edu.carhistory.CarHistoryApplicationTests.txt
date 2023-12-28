@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: zygar.edu.carhistory.CarHistoryApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.192 s - in zygar.edu.carhistory.CarHistoryApplicationTests
